@@ -175,8 +175,8 @@ class realEstateIndia:
             soup = BeautifulSoup(resp.content, 'html5lib')
 
             #Writing HTML files.
-            '''with open(f'{self.directory}/{url[8:].replace(".", "").replace("/","_")}.html', 'w', encoding='utf-8') as s:
-                s.write(soup.prettify())'''
+            with open(f'{self.directory}/{url[8:].replace(".", "").replace("/","_")}.html', 'w', encoding='utf-8') as s:
+                s.write(soup.prettify())
 
         elif via_saved_file == True:
             file_ = open(self.directory+'/'+url)
