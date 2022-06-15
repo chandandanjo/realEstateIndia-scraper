@@ -15,7 +15,7 @@ class realEstateIndia:
         self.session = requests.Session()
         self.properties_url_list = []
         self.add_properties_url_list = []
-        self.main_url = f'https://www.realestateindia.com/search.php?searchlistfor=2&allcategory=17&cityname={city_name}&cityname_hidden={city_id}' #Change accordingly
+        self.main_url = f'https://www.realestateindia.com/search.php?searchlistfor=2&allcategory=17&cityname={city_name}&cityname_hidden={city_id}'
 
     def create_files(self):
         self.directory = f'./content/cities_htmls/{self.city_name}_HTMLS'
@@ -35,6 +35,8 @@ class realEstateIndia:
 
     def total_prop_count(self):
         resp = requests.get(self.main_url)
+        while resp.status_code != 200:
+            resp = requests.get(self.main_url)
         soup = BeautifulSoup(resp.content, 'html5lib')
         self.total_properties = 0
         try:
@@ -45,8 +47,9 @@ class realEstateIndia:
 
     def initial_properties(self):
         s = self.session
-        url = self.main_url
-        resp = s.get(url)
+        resp = s.get(self.main_url)
+        while resp.status_code != 200:
+            resp = s.get(self.main_url)
         soup = BeautifulSoup(resp.content, 'html5lib')
         self.properties = soup.find_all('div', class_='ps-list mb15px bdr bdrddd')
         add_properties = soup.find_all('div', class_='p10px bdrt bdrddd pr')
@@ -71,7 +74,6 @@ class realEstateIndia:
         headers["referer"] = self.main_url
         pageno = 1
         while True:
-            #Change accordingly
             payload = {
                 'pageno': pageno,
                 'page_type': 'search_page',
@@ -112,10 +114,12 @@ class realEstateIndia:
             member_id = l.split('/')[-2].split('-')[-1]
 
             #initial
-            url = f"https://www.realestateindia.com/script-files/company-profile/property_fetch_results.php?action_id=filter_property&propertyfor=2&member_id={member_id}&sub_cat=17&prop_proj_type=property&cid={self.city_id}"    #Change accordingly
+            url = f"https://www.realestateindia.com/script-files/company-profile/property_fetch_results.php?action_id=filter_property&propertyfor=2&member_id={member_id}&sub_cat=17&prop_proj_type=property&cid={self.city_id}"
             headers = {}
             headers["referer"] = l
             resp = s.get(url, headers=headers)
+            while resp.status_code != 200:
+                resp = s.get(url, headers=headers)
             soup = BeautifulSoup(resp.content, 'html5lib')
             try:
                 url_list = soup.find('ul', {'id':'prop_sale_rent_results'}).find_all('li')
@@ -134,13 +138,14 @@ class realEstateIndia:
                 page_ = 1
 
                 while True:
-                    #Change accordingly
                     payload = {
                         'pageno': page_,
                         'propertyfor': 2,
                         'member_id': member_id,
                     }
                     resp = s.post(url, headers=headers, data=payload)
+                    while resp.status_code != 200:
+                        resp = s.post(url, headers=headers, data=payload)
                     soup = BeautifulSoup(resp.content, 'html5lib')
                     url_list_all= soup.find_all('li')
                     url_list = []
@@ -165,17 +170,19 @@ class realEstateIndia:
             s = self.session
 
             resp = s.get(url)
+            while resp.status_code != 200:
+                resp = s.get(url)
             soup = BeautifulSoup(resp.content, 'html5lib')
 
             #Writing HTML files.
-            with open(f'{self.directory}/{url[8:].replace(".", "").replace("/","_")}.html', 'w', encoding='utf-8') as s:
-                s.write(soup.prettify())
+            '''with open(f'{self.directory}/{url[8:].replace(".", "").replace("/","_")}.html', 'w', encoding='utf-8') as s:
+                s.write(soup.prettify())'''
 
         elif via_saved_file == True:
             file_ = open(self.directory+'/'+url)
             soup = BeautifulSoup(file_.read(), 'html5lib')
 
-        location, built_up_area, carpet_area, property_type, phone_no, posted_on, seller_type = 'NA', 'NA', 'NA', 'NA', 'NA', 'NA', 'NA'
+        location, built_up_area, carpet_area, property_type, posted_on = 'NA', 'NA', 'NA', 'NA', 'NA'
         a = soup.find('a', {'title':'Get Phone No.'})['onclick'].lstrip('Propertyclassified_EnqueryPopup').rstrip(';').split(',')
         mailto = int(a[1].strip().strip("'"))
         prop_id = int(a[2].strip().strip("'"))
@@ -235,11 +242,13 @@ class realEstateIndia:
             'page_url' : {url_.replace(':','%3A').replace('/','%2F')},
             'fname' : 'YOUR USERNAME',
             'user_name' : 'YOUR EMAIL',
-            'mobile' : 'YOUR PHONE NUMBER',
+            'mobile' : YOUR PHONE NUMBER,
             'member_type' : 1
         }
 
         resp = s.post(url, headers=headers, data=data)
+        while resp.status_code != 200:
+            resp = s.post(url, headers=headers, data=data)
         soup = BeautifulSoup(resp.content, 'html5lib')
         dealer_info = soup.find('div', class_='delear-info')
         seller_type, seller, seller_company, contact_num = 'NA', 'NA', 'NA', 'NA'
