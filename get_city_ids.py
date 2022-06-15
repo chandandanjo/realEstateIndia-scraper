@@ -18,7 +18,7 @@ class getCityIds:
 
 
     def get_city_id(self, city):
-        url = f'https://www.realestateindia.com/search.php?searchlistfor=2&allcategory=17&cityname={city}'
+        url = f'https://www.realestateindia.com/search.php?searchlistfor=2&allcategory=17&cityname={city}'  #Change accordingly (but not required maybe)
         resp = self.session.get(url)
         soup = BeautifulSoup(resp.content, 'html5lib')
         city_id = int(soup.find('input', {'name':'allcity'}).attrs['value'])
