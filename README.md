@@ -1,12 +1,32 @@
-# realEstateIndia-scraper
-Fetch property records along with contact details from https://www.realestateindia.com/ in xlsx format.
+# RealEstateIndia Property Scraper
 
-### NOTE : PLEASE FILL THE USER DETAILS IN contact_details FUNCTION OF realEstateIndia.py BEFORE EXECUTION.
-### NOTE : IF YOU DON'T WANT TO SAVE THE HTML FILES OF EACH PROPERTY THEN REMOVE IT FROM create_files & single_page FUNCTIONS IN realEstateIndia.py BEFORE EXECUTION.
+This Python script is designed to scrape property records, including contact details, from [RealEstateIndia](https://www.realestateindia.com/). It saves the data in an xlsx format for easy access and analysis.
 
-#### SOME IMPORTANT POINTS :
-  - I have written this script to scrape only *commercial properties for lease*. You can modify the URLs and Payloads according to your specific needs.
-      - I've commented **#Change accordingly** wherever changes are required for tailoring your own custom request.
-  - City ids are necessary to scrape all the details, so for that I've written a separate script which takes list of cities and returns a dictionary containing city name and city id as key:value pairs respectively. This can then be passed to the main realEstateIndia class while instantiating it to get the output.
-  - Previously I tried using csv instead of xlsx but there was an issue with phone-number while viewing on MS EXCEL.
-  - It's really slow (300 properties in ~7 minutes) as I haven't incorporated multithreading/multiprocessing. BUT YOU CAN.
+## Important Notes
+Before running the script, please ensure the following:
+
+1. Fill in your user details in the `contact_details` function of `realEstateIndia.py` to enable the contact information retrieval feature.
+
+2. If you don't want to save HTML files for each property, you can remove that functionality from the `create_files` and `single_page` functions in `realEstateIndia.py`.
+
+## Usage
+
+#### Customization
+- The script is set up to scrape only *commercial properties for lease*. You can tailor it to your specific needs by modifying the URLs and payloads. Look for the comments `#Change accordingly` in the code for guidance.
+
+#### City IDs
+- City IDs are necessary to scrape all the details. To obtain city IDs, you can use the separate script provided, which takes a list of cities and returns a dictionary containing city names and city IDs as key-value pairs. You can then pass this dictionary to the main `realEstateIndia` class when instantiating it to get the desired output.
+
+#### Output Format
+- The script saves data in xlsx format instead of CSV to avoid issues with phone numbers when viewing in MS Excel.
+
+#### Performance
+- The script's performance can be slow (e.g., scraping 300 properties in approximately 7 minutes) because it doesn't incorporate multithreading or multiprocessing. However, you can implement these features to improve speed.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+- This script was created for educational purposes and should be used responsibly and in accordance with RealEstateIndia's terms of service.
+- Special thanks to the BeautifulSoup and Requests libraries for making web scraping easier.
+- Feel free to modify and customize the script to suit your specific web scraping requirements.
